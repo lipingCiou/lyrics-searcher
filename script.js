@@ -196,72 +196,94 @@ const lyricsDatabase = {
     "暇滿人身多美好": "暇滿人身多美好\n百靈鳥哇百靈鳥　明媚清晨枝頭叫\n藍天白雲飄呀飄　溫暖陽光照又照\n百靈鳥哇百靈鳥　明媚清晨枝頭叫\n藍天白雲飄呀飄　溫暖陽光照又照\n暇滿人身喜氣洋洋　十八順緣具足啦\n當以菩提心為目標　人生大路多美好\n啦啦啦啦啦　啦啦啦啦啦\n啦啦啦啦啦　啦啦啦啦啦\n百靈鳥枝頭叫　藍天白雲飄又飄\n暇滿人身由戒得　布施忍辱作助伴\n親近善士勤聞思　法海經藏多美好\n啦啦啦啦啦　啦啦啦啦啦\n啦啦啦啦啦　啦啦啦啦啦\n法海經藏多美好　法海經藏多美好\n暇滿人身利益高　感謝上師恩賜了\n清晨小鳥鳴又叫　藍天白雲飄又飄\n佛日生輝高高照　代代僧才萬古耀\n續佛慧命是我志　菩提心苗高又高\n菩提心苗高又高\n啦啦啦　啦啦啦　暇滿人身好\n啦啦啦　啦啦啦　當惜人身寶\n清淨持戒忍辱布施　今生再續菩提路\n無限生命多美好\n百靈鳥枝頭叫　藍天白雲飄又飄\n佛日生輝眾生皆朗照　暇滿人身多美好\n佛日生輝眾生皆朗照\n暇滿人身多美好\n勸君惜取人身寶　勸君惜取人身寶"
   }
 };
+const cheatCodes = {
+  "1206快閃": [
+    "凝眸",
+    "月光下",
+    "勇悍行",
+    "你是我最亮的星",
+    "文殊菩薩祈求頌",
+    "幸福時刻",
+    "跟上文殊行",
+    "覓幽蘭",
+    "第一縷晨光",
+    "樹影婆娑明月照",
+    "又見你的容顏"
+  ],
+  // 可以繼續在這裡新增更多歌單
+  "常用": [
+    "文殊菩薩祈求頌",
+    "覓幽蘭",
+    "跟上文殊行"
+  ]
+};
 
 // ========================================================================
-// 事件監聽：將 onclick 從 HTML 中移除，改為更專業的寫法
+// 事件監聽
 // ========================================================================
 document.addEventListener('DOMContentLoaded', () => {
   const searchButton = document.getElementById('search-button');
+  const songTitlesTextarea = document.getElementById('song-titles'); // 取得輸入框
+
   if (searchButton) {
     searchButton.addEventListener('click', handleSearch);
   }
+  // ↓↓↓ 新增：監聽輸入框的輸入事件，以觸發密技 ↓↓↓
+  if (songTitlesTextarea) {
+    songTitlesTextarea.addEventListener('input', handleCheatCodeInput);
+  }
 });
 
-// ========================================================================
-// 搜尋邏輯 (純前端 JavaScript 函式)
-// ========================================================================
-function searchLyricsLocal(songTitlesString) {
-  if (!songTitlesString || songTitlesString.trim() === '') {
-    return [{ title: '錯誤', lyrics: '請輸入歌曲名稱。', error: true }];
+
+function handleCheatCodeInput(event) {
+  const currentText = event.target.value.trim();
+  
+  // 檢查當前輸入的文字是否匹配某個密技
+  if (cheatCodes[currentText]) {
+    const playlist = cheatCodes[currentText];
+    const playlistText = playlist.join('\n');
+    
+    // 替換輸入框的內容
+    event.target.value = playlistText;
+
+    // 提供一個小小的視覺回饋，讓使用者知道觸發成功
+    event.target.classList.add('cheat-code-activated');
+    setTimeout(() => {
+      event.target.classList.remove('cheat-code-activated');
+    }, 300); // 0.3秒後移除效果
   }
+}
+
+
+function searchLyricsLocal(songTitlesString) {
+  if (!songTitlesString || songTitlesString.trim() === '') { return [{ title: '錯誤', lyrics: '請輸入歌曲名稱。', error: true }]; }
   const songTitles = songTitlesString.split('\n').filter(title => title.trim() !== '');
   const results = [];
   const songs = lyricsDatabase.songs;
   const allDbTitles = Object.keys(songs);
-
   songTitles.forEach(title => {
     const trimmedTitle = title.trim();
-    if (songs[trimmedTitle]) {
-      results.push({ title: trimmedTitle, lyrics: songs[trimmedTitle] });
-      return;
-    }
+    if (songs[trimmedTitle]) { results.push({ title: trimmedTitle, lyrics: songs[trimmedTitle] }); return; }
     const fuzzyMatches = allDbTitles.filter(dbTitle => dbTitle.includes(trimmedTitle));
-    if (fuzzyMatches.length === 1) {
-      const matchedTitle = fuzzyMatches[0];
-      results.push({ title: matchedTitle, lyrics: songs[matchedTitle] });
-    } else if (fuzzyMatches.length > 1) {
-      results.push({ title: trimmedTitle, choices: fuzzyMatches, disambiguation: true });
-    } else {
-      results.push({ title: trimmedTitle, lyrics: `抱歉，資料庫中暫未收錄 "${trimmedTitle}" 的歌詞。`, error: true });
-    }
+    if (fuzzyMatches.length === 1) { const matchedTitle = fuzzyMatches[0]; results.push({ title: matchedTitle, lyrics: songs[matchedTitle] }); } 
+    else if (fuzzyMatches.length > 1) { results.push({ title: trimmedTitle, choices: fuzzyMatches, disambiguation: true }); }
+    else { results.push({ title: trimmedTitle, lyrics: `抱歉，資料庫中暫未收錄 "${trimmedTitle}" 的歌詞。`, error: true }); }
   });
   return results;
 }
-
-// ========================================================================
-// 介面互動函式
-// ========================================================================
 function handleSearch() {
   const searchButton = document.getElementById('search-button');
   const loadingIndicator = document.getElementById('loading');
   const resultsContainer = document.getElementById('results-container');
-
   resultsContainer.style.display = 'none';
   loadingIndicator.style.display = 'flex';
   searchButton.disabled = true;
-
   const songTitles = document.getElementById('song-titles').value;
-  
   setTimeout(() => {
-    try {
-      const results = searchLyricsLocal(songTitles);
-      updateResults(results);
-    } catch (error) {
-      onFailure(error);
-    }
+    try { const results = searchLyricsLocal(songTitles); updateResults(results); } 
+    catch (error) { onFailure(error); }
   }, 50);
 }
-
 function updateResults(results) {
   const resultsContainer = document.getElementById('results-container');
   resultsContainer.innerHTML = '';
@@ -270,9 +292,7 @@ function updateResults(results) {
     resultDiv.className = 'song-result';
     if (result.disambiguation) {
       let choicesHtml = `<h3>您想找的是不是 "${result.title}" 的其中一首？</h3><div class="choice-buttons">`;
-      result.choices.forEach(choice => {
-        choicesHtml += `<button class="choice-button" onclick="handleChoiceClick('${result.title}', '${choice}')">${choice}</button>`;
-      });
+      result.choices.forEach(choice => { choicesHtml += `<button class="choice-button" onclick="handleChoiceClick('${result.title}', '${choice}')">${choice}</button>`; });
       choicesHtml += '</div>';
       resultDiv.innerHTML = choicesHtml;
     } else if (result.lyrics && !result.error) {
@@ -294,7 +314,6 @@ function updateResults(results) {
   resultsContainer.style.display = 'block';
   searchButton.disabled = false;
 }
-
 function handleChoiceClick(originalTitle, chosenTitle) {
   const textarea = document.getElementById('song-titles');
   const currentTitles = textarea.value.split('\n');
@@ -305,7 +324,6 @@ function handleChoiceClick(originalTitle, chosenTitle) {
   textarea.value = newTitles.join('\n');
   handleSearch();
 }
-
 function onFailure(error) {
   const resultsContainer = document.getElementById('results-container');
   resultsContainer.innerHTML = `<div class="song-result error"><h3>發生錯誤</h3><pre class="error-message">${error.message}</pre></div>`;

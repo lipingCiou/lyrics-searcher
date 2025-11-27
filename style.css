@@ -1,3 +1,4 @@
+/* ... 您之前所有的 CSS 樣式都保持不變 ... */
 :root {
   --primary-color: #8a6d3b;
   --background-color: #fdfbf7;
@@ -21,15 +22,9 @@ body {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
-h1 {
-  color: var(--primary-color);
-  text-align: center;
-  border-bottom: 2px solid var(--primary-color);
-  padding-bottom: 10px;
-  margin-top: 0;
-}
+h1 { color: var(--primary-color); text-align: center; border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; margin-top: 0; }
 p { line-height: 1.6; }
-textarea { width: 100%; padding: 10px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box; margin-bottom: 15px; line-height: 1.5; }
+textarea { width: 100%; padding: 10px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box; margin-bottom: 15px; line-height: 1.5; transition: background-color 0.3s ease-in-out; }
 button { display: block; width: 100%; padding: 12px; font-size: 18px; font-weight: bold; color: #fff; background-color: var(--primary-color); border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; }
 button:hover:not(:disabled) { background-color: #6c562e; }
 button:disabled { background-color: #bca98c; cursor: not-allowed; }
@@ -47,10 +42,17 @@ button:disabled { background-color: #bca98c; cursor: not-allowed; }
 .choice-button { width: auto; background-color: #fff; color: var(--primary-color); border: 1px solid var(--primary-color); padding: 6px 14px; border-radius: 16px; font-size: 14px; font-weight: normal; }
 .choice-button:hover:not(:disabled) { background-color: var(--background-color); color: #6c562e; }
 
+/* --- RWD 樣式 --- */
 @media (max-width: 600px) {
   body { padding: 10px; }
   .container { padding: 15px; }
   h1 { font-size: 1.5rem; }
   button { font-size: 16px; }
   .song-result, .song-result.error { padding: 12px; }
+}
+
+/* --- ↓↓↓ 新增：密技觸發時的視覺回饋效果 ↓↓↓ --- */
+textarea.cheat-code-activated {
+  background-color: #fdfbf7; /* 您的主題背景色 */
+  box-shadow: 0 0 5px var(--primary-color); /* 邊框發光效果 */
 }
