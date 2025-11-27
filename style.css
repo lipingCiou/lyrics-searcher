@@ -1,4 +1,4 @@
-/* ... 您之前所有的 CSS 樣式都保持不變 ... */
+
 :root {
   --primary-color: #8a6d3b;
   --background-color: #fdfbf7;
@@ -51,8 +51,7 @@ button:disabled { background-color: #bca98c; cursor: not-allowed; }
   .song-result, .song-result.error { padding: 12px; }
 }
 
-/* --- ↓↓↓ 新增：密技觸發時的視覺回饋效果 ↓↓↓ --- */
 textarea.cheat-code-activated {
-  background-color: #fdfbf7; /* 您的主題背景色 */
+  background-color: #fdfbf7; 
   box-shadow: 0 0 5px var(--primary-color); /* 邊框發光效果 */
 }
