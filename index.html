@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>福智讚頌歌詞搜尋 (專業版)</title>
+  <!-- 引用外部的 CSS 樣式表 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>福智讚頌歌詞搜尋</h1>
+    <p>請在下方輸入框中輸入一或多首讚頌的名稱，每首一行。</p>
+    <textarea id="song-titles" rows="5" placeholder="例如：&#10;勇悍行&#10;月光"></textarea>
+    <button id="search-button">搜尋</button>
+    <div id="loading">
+      <div class="spinner"></div>
+      <p>搜尋中，請稍候...</p>
+    </div>
+    <div id="results-container"></div>
+  </div>
+  
+  <!-- 引用外部的 JavaScript 腳本 -->
+  <!-- defer 屬性是一個好習慣，它會讓瀏覽器在解析完 HTML 後才執行腳本 -->
+  <script src="script.js" defer></script>
+</body>
+</html>
